@@ -32,3 +32,10 @@ dask
 vaex
 onnx
 onnxruntime
+torch-geometric
+dgl
+prophet
+h2o
+autokeras
+gluonts
+networkx
