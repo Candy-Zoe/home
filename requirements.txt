@@ -8,3 +8,14 @@ seaborn
 torch
 torchvision
 tensorflow
+pillow
+plotly
+jieba
+transformers
+wordcloud
+xgboost
+lightgbm
+catboost
+nltk
+spacy
+en_core_web_sm
