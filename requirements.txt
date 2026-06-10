@@ -1,2 +1,10 @@
 pymysql
 flask
+numpy
+pandas
+scikit-learn
+matplotlib
+seaborn
+torch
+torchvision
+tensorflow
