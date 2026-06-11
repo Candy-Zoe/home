@@ -1,3 +1,7 @@
+# Flask Web应用程序
+# 主要内容：婚礼RSVP和评论管理系统
+# 功能包括：RSVP提交、评论提交、查看所有数据、数据可视化
+
 import pymysql
 import os
 from flask import Flask, request, jsonify, render_template_string
