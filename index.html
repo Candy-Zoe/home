@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI学习库汇总</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding-bottom: 50px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            padding: 40px 0;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.15);
+            backdrop-filter: blur(10px);
+            padding: 20px 40px;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+        }
+
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .stat-card .label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: inline-block;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .category-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px;
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .category-card h3 {
+            color: #667eea;
+            margin-bottom: 12px;
+            font-size: 1.2rem;
+        }
+
+        .category-card p {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .library-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .library-tag {
+            background: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #667eea;
+            border: 1px solid #667eea;
+        }
+
+        .library-tag:hover {
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+        }
+
+        .chapter-section {
+            margin-top: 20px;
+        }
+
+        .chapter-header {
+            background: #667eea;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chapter-header:hover {
+            background: #5a6fd6;
+        }
+
+        .chapter-header h4 {
+            font-size: 1.1rem;
+        }
+
+        .chapter-header .arrow {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .chapter-content {
+            display: none;
+            padding-left: 20px;
+        }
+
+        .chapter-content.active {
+            display: block;
+        }
+
+        .chapter-list {
+            list-style: none;
+            columns: 2;
+            gap: 10px;
+        }
+
+        .chapter-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95rem;
+            color: #555;
+        }
+
+        .chapter-list li:last-child {
+            border-bottom: none;
+        }
+
+        .chapter-list li::before {
+            content: '✓';
+            color: #667eea;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        .update-section {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+        }
+
+        .update-section h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .update-list {
+            columns: 2;
+            gap: 10px;
+        }
+
+        .update-list li {
+            padding: 6px 0;
+            font-size: 0.95rem;
+            opacity: 0.95;
+        }
+
+        .update-list li::before {
+            content: '•';
+            color: #fff;
+            margin-right: 8px;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            padding: 20px;
+            margin-top: 30px;
+            opacity: 0.8;
+        }
+
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .filter-tab:hover,
+        .filter-tab.active {
+            background: white;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .stats {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .stat-card {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .chapter-list {
+                columns: 1;
+            }
+
+            .update-list {
+                columns: 1;
+            }
+
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 AI学习库汇总</h1>
+            <p>一站式学习各种人工智能库，从基础到进阶</p>
+        </header>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="number">33</div>
+                <div class="label">学习库数量</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">140+</div>
+                <div class="label">学习文件</div>
+            </div>
+            <div class="stat-card">
+                <div class="number">12</div>
+                <div class="label">覆盖领域</div>
+            </div>
+        </div>
+
+        <div class="filter-tabs">
+            <button class="filter-tab active" onclick="filterCategories('all')">全部</button>
+            <button class="filter-tab" onclick="filterCategories('data')">数据处理</button>
+            <button class="filter-tab" onclick="filterCategories('ml')">机器学习</button>
+            <button class="filter-tab" onclick="filterCategories('dl')">深度学习</button>
+            <button class="filter-tab" onclick="filterCategories('cv')">计算机视觉</button>
+            <button class="filter-tab" onclick="filterCategories('nlp')">自然语言处理</button>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📚 项目结构</h2>
+            
+            <div class="category-grid">
+                <div class="category-card" data-category="data">
+                    <h3>📊 数据处理库</h3>
+                    <p>数值计算、数据分析和大数据处理的基础库，是AI开发的基石。</p>
+                    <div class="library-tags">
+                        <span class="library-tag">NumPy</span>
+                        <span class="library-tag">Pandas</span>
+                        <span class="library-tag">PySpark</span>
+                        <span class="library-tag">Dask</span>
+                        <span class="library-tag">Vaex</span>
+                    </div>
+                </div>
+
+                <div class="category-card" data-category="visual">
+                    <h3>📈 可视化库</h3>
+                    <p>数据可视化工具，帮助理解数据和展示结果。</p>
+                    <div class="library-tags">
+                        <span class="library-tag">Matplotlib</span>
+                        <span class="library-tag">Seaborn</span>
+                        <span class="library-tag">Plotly</span>
+                    </div>
+                </div>
+
+                <div class="category-card" data-category="ml">
+                    <h3>🧠 机器学习库</h3>
+                    <p>经典机器学习算法和梯度提升框架，用于分类、回归、聚类等任务。</p>
+                    <div class="library-tags">
+                        <span class="library-tag">scikit-learn</span>
+                        <span class="library-tag">XGBoost</span>
+                        <span class="library-tag">LightGBM</span>
+                        <span class="library-tag">CatBoost</span>
+                    </div>
+                </div>
+
+                <div class="category-card" data-category="dl">
+                    <h3>⚡ 深度学习库</h3>
+                    <p>深度学习框架，用于构建和训练神经网络模型。</p>
+                    <div class="library-tags">
+                        <span class="library-tag">PyTorch</span>
+                        <span class="library-tag">TensorFlow</span>
+                        <span class="library-tag">PyTorch Lightning</span>
+                    </div>
+                </div>
+
+                <div class="category-card" data-category="rl">
+                    <h3>🎮 强化学习库</h3>
+                    <p>强化学习环境和算法实现，用于训练智能体。</p>
+                    <div class="library-tags">
+                        <span class="library-tag">Gymnasium</span>
+                        <span class="library-tag">Stable Baselines3</span>
+                    </div>
+                </div>
+
+                <div class="category-card" data-category="cv">
+                    <h3>👁️ 计算机视觉库</h3>
+                    <p>图像处理和计算机视觉算法，用于图像识别、目标检测等任务。</p>
+                    <div class="library-tags">
+                        <span class="library-tag">OpenCV</span>
+                        <span class="library-tag">Pillow</span>
+                        <span class="library-tag">scikit-image</span>
+                    </div>
+                </div>
+
+                <div class="category-card" data-category="nlp">
+                    <h3>💬 自然语言处理库</h3>
+                    <p>文本处理和NLP算法，包括分词、词性标注、预训练模型等。</p>
+                    <div class="library-tags">
+                        <span class="library-tag">jieba</span>
+                        <span class="library-tag">NLTK</span>
+                        <span class="library-tag">spaCy</span>
+                        <span class="library-tag">Transformers</span>
+                        <span class="library-tag">Gensim</span>
+                    </div>
+                </div>
+
+                <div class="category-card" data-category="gnn">
+                    <h3>🔗 图神经网络库</h3>
+                    <p>图数据结构和图神经网络模型，用于图数据处理。</p>
+                    <div class="library-tags">
+                        <span class="library-tag">PyTorch Geometric</span>
+                        <span class="library-tag">DGL</span>
+                    </div>
+                </div>
+
+                <div class="category-card" data-category="tools">
+                    <h3>🛠️ 工具库</h3>
+                    <p>辅助工具，包括超参数优化、实验跟踪和模型部署。</p>
+                    <div class="library-tags">
+                        <span class="library-tag">Optuna</span>
+                        <span class="library-tag">WandB</span>
+                        <span class="library-tag">ONNX</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">📖 学习章节详解</h2>
+
+            <div class="chapter-section">
+                <div class="chapter-header" onclick="toggleChapter('numpy')">
+                    <h4>NumPy学习</h4>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="chapter-content" id="numpy">
+                    <ul class="chapter-list">
+                        <li>1.1 数组创建与属性</li>
+                        <li>1.2 数组索引与切片</li>
+                        <li>2.1 数组运算</li>
+                        <li>2.2 数组统计与聚合</li>
+                        <li>3.1 数组形状操作</li>
+                        <li>3.2 矩阵操作</li>
+                        <li>4.1 随机数生成</li>
+                        <li>4.2 文件读写</li>
+                        <li>5.1 傅里叶变换</li>
+                        <li>6.1 高级数值计算</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chapter-section">
+                <div class="chapter-header" onclick="toggleChapter('pandas')">
+                    <h4>Pandas学习</h4>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="chapter-content" id="pandas">
+                    <ul class="chapter-list">
+                        <li>1.1 DataFrame基础</li>
+                        <li>1.2 数据选择与过滤</li>
+                        <li>2.1 数据清洗</li>
+                        <li>2.2 数据聚合与分组</li>
+                        <li>3.1 数据合并</li>
+                        <li>3.2 文件读写</li>
+                        <li>4.1 时间序列处理</li>
+                        <li>4.2 数据透视与聚合</li>
+                        <li>5.1 数据可视化</li>
+                        <li>6.1 高级索引</li>
+                        <li>7.1 高级数据分析</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chapter-section">
+                <div class="chapter-header" onclick="toggleChapter('matplotlib')">
+                    <h4>Matplotlib学习</h4>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="chapter-content" id="matplotlib">
+                    <ul class="chapter-list">
+                        <li>1.1 基础图表</li>
+                        <li>1.2 高级图表</li>
+                        <li>2.1 样式与主题</li>
+                        <li>2.2 3D可视化</li>
+                        <li>3.1 动画</li>
+                        <li>4.1 统计图表</li>
+                        <li>5.1 子图布局</li>
+                        <li>6.1 高级可视化</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chapter-section">
+                <div class="chapter-header" onclick="toggleChapter('sklearn')">
+                    <h4>scikit-learn学习</h4>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="chapter-content" id="sklearn">
+                    <ul class="chapter-list">
+                        <li>1.1 数据预处理</li>
+                        <li>1.2 模型评估</li>
+                        <li>2.1 线性回归</li>
+                        <li>2.2 分类算法</li>
+                        <li>3.1 聚类算法</li>
+                        <li>3.2 降维算法</li>
+                        <li>4.1 管道与超参数调优</li>
+                        <li>4.2 异常检测</li>
+                        <li>4.3 集成学习</li>
+                        <li>5.1 模型选择</li>
+                        <li>6.1 特征工程进阶</li>
+                        <li>7.1 模型持久化</li>
+                        <li>8.1 高级特征工程</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chapter-section">
+                <div class="chapter-header" onclick="toggleChapter('pytorch')">
+                    <h4>PyTorch学习</h4>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="chapter-content" id="pytorch">
+                    <ul class="chapter-list">
+                        <li>1.1 张量基础</li>
+                        <li>1.2 自动微分</li>
+                        <li>2.1 线性回归模型</li>
+                        <li>2.2 神经网络分类</li>
+                        <li>3.1 CNN图像识别</li>
+                        <li>3.2 RNN循环神经网络</li>
+                        <li>4.1 数据加载与预处理</li>
+                        <li>4.2 模型保存与加载</li>
+                        <li>5.1 注意力机制</li>
+                        <li>5.2 迁移学习</li>
+                        <li>6.1 卷积神经网络进阶</li>
+                        <li>7.1 序列模型</li>
+                        <li>8.1 模型优化</li>
+                        <li>9.1 深度学习进阶</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chapter-section">
+                <div class="chapter-header" onclick="toggleChapter('opencv')">
+                    <h4>OpenCV学习</h4>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="chapter-content" id="opencv">
+                    <ul class="chapter-list">
+                        <li>1.1 图像基础操作</li>
+                        <li>1.2 图像处理</li>
+                        <li>2.1 特征检测</li>
+                        <li>2.2 视频处理</li>
+                        <li>2.3 目标检测</li>
+                        <li>3.1 图像拼接</li>
+                        <li>3.2 图像修复</li>
+                        <li>4.1 图像分割</li>
+                        <li>5.1 特征匹配</li>
+                        <li>6.1 目标跟踪</li>
+                        <li>7.1 深度学习集成</li>
+                        <li>8.1 图像形态学</li>
+                        <li>8.2 特征匹配与检索</li>
+                        <li>8.3 人脸识别</li>
+                        <li>8.4 视频处理与分析</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chapter-section">
+                <div class="chapter-header" onclick="toggleChapter('transformers')">
+                    <h4>Transformers学习</h4>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="chapter-content" id="transformers">
+                    <ul class="chapter-list">
+                        <li>1.1 文本分类</li>
+                        <li>1.2 文本生成</li>
+                        <li>2.1 命名实体识别</li>
+                        <li>2.2 问答系统</li>
+                        <li>3.1 自定义模型训练</li>
+                        <li>4.1 文本摘要</li>
+                        <li>5.1 翻译任务</li>
+                        <li>6.1 问答系统进阶</li>
+                        <li>7.1 自定义模型与训练</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="chapter-section">
+                <div class="chapter-header" onclick="toggleChapter('other')">
+                    <h4>其他库学习</h4>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="chapter-content" id="other">
+                    <ul class="chapter-list">
+                        <li>XGBoost: 分类任务、回归任务、参数调优、梯度提升</li>
+                        <li>LightGBM: 分类任务、回归任务、参数调优、梯度提升框架</li>
+                        <li>CatBoost: 分类任务、回归任务、参数调优、梯度提升</li>
+                        <li>TensorFlow: Tensor基础、自动微分、神经网络、高级特性</li>
+                        <li>Gymnasium: 环境基础、自定义环境、Q-Learning、强化学习环境</li>
+                        <li>NLTK: 文本处理基础、文本分类、NER、自然语言处理</li>
+                        <li>spaCy: 基本操作、文本处理、文本分类、工业级NLP</li>
+                        <li>Gensim: Word2Vec、LDA、Doc2Vec、主题建模与词向量</li>
+                        <li>Optuna: 超参数优化基础、贝叶斯优化、超参数优化</li>
+                        <li>Plotly: 基础图表、高级图表、交互式可视化</li>
+                        <li>seaborn: 基础图表、高级图表、高级可视化</li>
+                        <li>Pillow: 图像基础操作、图像变换、图像处理</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="update-section">
+                <h3>📅 最新更新记录 (2026年6月)</h3>
+                <ul class="update-list">
+                    <li>新增PyTorch深度学习进阶教程</li>
+                    <li>新增scikit-learn高级特征工程教程</li>
+                    <li>新增Pandas高级数据分析教程</li>
+                    <li>新增NumPy高级数值计算教程</li>
+                    <li>新增Matplotlib高级可视化教程</li>
+                    <li>新增TensorFlow高级特性教程</li>
+                    <li>新增NLTK自然语言处理教程</li>
+                    <li>新增spaCy工业级NLP教程</li>
+                    <li>新增XGBoost梯度提升进阶教程</li>
+                    <li>新增Gensim主题建模与词向量教程</li>
+                    <li>新增Gymnasium强化学习环境教程</li>
+                    <li>新增LightGBM梯度提升框架教程</li>
+                    <li>新增CatBoost梯度提升教程</li>
+                    <li>新增Plotly交互式可视化教程</li>
+                    <li>新增Optuna超参数优化教程</li>
+                    <li>新增Pillow图像处理教程</li>
+                    <li>新增seaborn高级可视化教程</li>
+                    <li>新增OpenCV多个高级教程</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>AI学习库汇总 - 持续更新中...</p>
+            <p style="font-size: 0.85rem; opacity: 0.8;">共33个学习库，140+个学习文件</p>
+        </footer>
+    </div>
+
+    <script>
+        function toggleChapter(chapterId) {
+            const content = document.getElementById(chapterId);
+            const header = content.parentElement.querySelector('.chapter-header');
+            const arrow = header.querySelector('.arrow');
+            
+            if (content.classList.contains('active')) {
+                content.classList.remove('active');
+                arrow.style.transform = 'rotate(0deg)';
+            } else {
+                // 关闭其他章节
+                document.querySelectorAll('.chapter-content.active').forEach(el => {
+                    el.classList.remove('active');
+                    el.parentElement.querySelector('.arrow').style.transform = 'rotate(0deg)';
+                });
+                content.classList.add('active');
+                arrow.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function filterCategories(category) {
+            const cards = document.querySelectorAll('.category-card');
+            const tabs = document.querySelectorAll('.filter-tab');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // 默认展开第一个章节
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstChapter = document.querySelector('.chapter-content');
+            if (firstChapter) {
+                firstChapter.classList.add('active');
+                firstChapter.parentElement.querySelector('.arrow').style.transform = 'rotate(180deg)';
+            }
+        });
+    </script>
+</body>
+</html>
